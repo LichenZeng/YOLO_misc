@@ -93,24 +93,27 @@ class Detect:
 
 
 if __name__ == '__main__':
-    # img_path = r"224/2007_000129.jpg"  # 1框
-    img_path = r"224/2007_000323.jpg"  # 2框
-    img = Image.open(img_path)
+    # img_path = r"images/2007_000129.jpg"  # 1框
+    img_path = r"images/2007_000392.jpg"  # 2框
+    # img_path = 'images/2007_000323.jpg'
+    org_img = Image.open(img_path)
+    w, h = org_img.size
+    img = org_img.resize((224, 224), Image.ANTIALIAS)
     img_in = np.array(img, dtype=np.float32) / 255.0 - 0.5
     img_in = np.transpose(img_in, (2, 0, 1))
     img_in = np.array([img_in])
 
     detect = Detect(img_in)
     boxes = detect.detect()
-    imDrwa = ImageDraw.Draw(img)
+    imDrwa = ImageDraw.Draw(org_img)
     # boxes = [[10, 20, 129, 255],[126, 0, 221, 164]]
     for i in range(len(boxes)):
         print(boxes[i])
 
-        x1 = int(boxes[i][0])
-        y1 = int(boxes[i][1])
-        x2 = int(boxes[i][2])
-        y2 = int(boxes[i][3])
+        x1 = int(int(boxes[i][0]) * w / 224)
+        y1 = int(int(boxes[i][1]) * h / 224)
+        x2 = int(int(boxes[i][2]) * w / 224)
+        y2 = int(int(boxes[i][3]) * h / 224)
         imDrwa.rectangle((x1, y1, x2, y2), outline="red")
-    img.save("./yolo.jpg")
-    img.show()
+    org_img.save("./yolo.jpg")
+    org_img.show()
