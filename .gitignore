@@ -1,0 +1,8 @@
+*~
+.pyc
+224
+images
+label
+__pycache__
+*.jpg
+.idea
